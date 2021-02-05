@@ -38,4 +38,6 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CoursesEntity> coursesEntityList = new ArrayList<>();
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GroupUser> groupStudies = new ArrayList<>();
 }

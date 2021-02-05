@@ -22,6 +22,8 @@ public class CoursesEntity {
 
     @OneToMany(mappedBy = "coursesEntity",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ExamEntity> examEntityList = new ArrayList<>();
+    @OneToMany(mappedBy = "coursesEntity",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GroupEntity> groupEntities = new ArrayList<>();
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "auth_user_id")

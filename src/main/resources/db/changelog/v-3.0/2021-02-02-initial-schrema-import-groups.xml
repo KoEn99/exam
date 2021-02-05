@@ -4,15 +4,27 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
-    <changeSet id="2020-02-02_1" author="koen">
-        <createTable tableName="group_study">
+    <changeSet id="2020-02-04_1" author="koen">
+        <createTable tableName="groups_table">
+            <column name="id" type="VARCHAR(256)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(256)"/>
+            <column name="group_name_search" type="VARCHAR(4)"/>
+            <column name="courses_table_id" type="VARCHAR(256)">
+                <constraints nullable="false" foreignKeyName="fk_address_courses_table" references="courses_table(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2020-02-04_2" author="koen">
+        <createTable tableName="group_user">
             <column name="auth_user_id" type="VARCHAR(256)">
                 <constraints nullable="false" foreignKeyName="fk_address_auth_user" references="auth_user(id)"
                 primaryKey="true"/>
             </column>
-            <column name="courses_table_id" type="VARCHAR(256)">
-                <constraints nullable="false" foreignKeyName="fk_address_courses_table" references="courses_table(id)"
-                primaryKey="true"/>
+            <column name="groups_table_id" type="VARCHAR(256)">
+                <constraints nullable="false" foreignKeyName="fk_address_groups_table" references="groups_table(id)" primaryKey="true"/>
             </column>
         </createTable>
     </changeSet>

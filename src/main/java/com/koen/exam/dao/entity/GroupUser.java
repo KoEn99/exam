@@ -8,14 +8,16 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "group_study")
-public class GroupStudy implements Serializable {
-    @Id
+@Table(name = "group_user")
+public class GroupUser implements Serializable {
+    @EmbeddedId
+    GroupStudyKey id;
     @ManyToOne
+    @MapsId("auth_user_id")
     @JoinColumn(name = "auth_user_id")
     private UserEntity userEntity;
-    @Id
     @ManyToOne
-    @JoinColumn(name = "courses_table_id")
-    private CoursesEntity coursesEntity;
+    @MapsId("groups_table_id")
+    @JoinColumn(name = "groups_table_id")
+    private GroupEntity groupEntity;
 }
