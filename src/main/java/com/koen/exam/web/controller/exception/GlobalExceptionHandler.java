@@ -26,6 +26,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     static int AUTH_EXCEPTION = 1000;
     static int ACCESS_EXCEPTION = 2000;
+    static int MYSELF_EXCEPTION = 3000;
 
     @Autowired
     MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
@@ -58,6 +59,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AccessException.class)
     protected ResponseEntity<GenericResponse<?>> handleAccessException(AccessException e) {
         GenericResponse<?> genericResponse = new GenericResponse<>(ACCESS_EXCEPTION, e.getMessage());
+        return new ResponseEntity<>(genericResponse, BAD_REQUEST);
+    }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(MySelfException.class)
+    protected ResponseEntity<GenericResponse<?>> selfException(MySelfException e) {
+        GenericResponse<?> genericResponse = new GenericResponse<>(MYSELF_EXCEPTION, e.getMessage());
         return new ResponseEntity<>(genericResponse, BAD_REQUEST);
     }
 }

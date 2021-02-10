@@ -1,13 +1,12 @@
 package com.koen.exam.web.controller.dto;
 
-import com.koen.exam.dao.entity.CoursesEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GroupDto {
+public class CourseResponse {
     private String id;
-    private String name;
-    private CoursesEntity coursesEntity;
+    private String title;
+    private String description;
 }

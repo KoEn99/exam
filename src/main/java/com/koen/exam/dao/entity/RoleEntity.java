@@ -1,5 +1,6 @@
 package com.koen.exam.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.springframework.security.core.userdetails.User;
 
@@ -14,10 +15,8 @@ public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column
     private String name;
-
     @OneToMany(mappedBy = "roleEntity",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserEntity> userEntityArrayList = new ArrayList<>();
 }

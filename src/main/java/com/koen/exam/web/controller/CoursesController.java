@@ -4,6 +4,7 @@ import com.koen.exam.services.CoursesService;
 import com.koen.exam.web.controller.dto.AuthDto;
 import com.koen.exam.web.controller.dto.CoursesDto;
 import com.koen.exam.web.controller.dto.GenericResponse;
+import com.koen.exam.web.controller.exception.AccessException;
 import com.koen.exam.web.controller.exception.AuthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,19 @@ public class CoursesController {
     CoursesService coursesService;
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
-    public ResponseEntity<GenericResponse<?>> createCourse  (@Valid @RequestBody CoursesDto coursesDto) throws AuthException {
+    public ResponseEntity<GenericResponse<?>> createCourse(@Valid @RequestBody CoursesDto coursesDto) throws AuthException {
         return new ResponseEntity<>(new GenericResponse<>(
                 coursesService.createCourse(coursesDto)), HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/my")
+    public ResponseEntity<GenericResponse<?>> getMyCourse() {
+        return new ResponseEntity<>(new GenericResponse<>(
+                coursesService.getMyCourse()), HttpStatus.OK);
+    }
+    @GetMapping("/find/{id}")
+    public ResponseEntity<GenericResponse<?>> findCourse(@PathVariable String id)
+            throws AuthException, AccessException {
+        return new ResponseEntity<>(new GenericResponse<>(coursesService.findCourse(id)), HttpStatus.OK);
     }
 }

@@ -35,7 +35,6 @@ public class ExamEntity {
     @Column(name = "status_active", length = 40)
     @Enumerated(EnumType.STRING)
     private StatusType statusType;
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "courses_table_id")
     private CoursesEntity coursesEntity;

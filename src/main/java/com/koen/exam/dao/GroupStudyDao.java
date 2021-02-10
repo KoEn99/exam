@@ -2,10 +2,13 @@ package com.koen.exam.dao;
 
 import com.koen.exam.dao.entity.GroupEntity;
 import com.koen.exam.dao.entity.GroupUser;
+import com.koen.exam.dao.entity.UserEntity;
 import com.koen.exam.dao.repo.GroupEntityRepository;
 import com.koen.exam.dao.repo.GroupStudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GroupStudyDao {
@@ -21,5 +24,8 @@ public class GroupStudyDao {
     }
     public GroupEntity getGroupEntity(String groupNameSearch){
         return groupEntityRepository.findByGroupNameSearch(groupNameSearch);
+    }
+    public List<GroupUser> findAllGroup(UserEntity userEntity){
+        return groupStudyRepository.findAllByUserEntity(userEntity);
     }
 }

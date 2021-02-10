@@ -1,5 +1,7 @@
 package com.koen.exam.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javafx.scene.Group;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +25,7 @@ public class GroupEntity {
     @ManyToOne
     @JoinColumn(name = "courses_table_id")
     private CoursesEntity coursesEntity;
+
     @OneToMany(mappedBy = "groupEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GroupUser> groupUsers = new ArrayList<>();
 
