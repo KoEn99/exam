@@ -8,6 +8,8 @@ import com.koen.exam.security.CustomUserDetails;
 import com.koen.exam.services.GroupStudyService;
 import com.koen.exam.web.controller.dto.AnswerResponse;
 import com.koen.exam.web.controller.dto.GroupDto;
+import com.koen.exam.web.controller.dto.UserGroupDto;
+import com.koen.exam.web.controller.exception.AccessException;
 import com.koen.exam.web.controller.exception.MySelfException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,13 +31,19 @@ public class GroupStudyServiceImpl implements GroupStudyService {
     UserServiceDao userServiceDao;
 
     @Override
-    public GroupDto addGroup(GroupDto groupDto) {
+    public GroupDto addGroup(GroupDto groupDto) throws AccessException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String login = userDetails.getUsername();
+        UserEntity userEntity = userServiceDao.findByLogin(login);
         Optional<CoursesEntity> coursesEntity = coursesServiceDao.getCourseEntity(groupDto.getCoursesEntity().getId());
-        GroupEntity groupEntity = new GroupEntity(groupDto.getName(), coursesEntity.get());
-        groupEntity.setId(UUID.randomUUID().toString());
-        groupEntity.setGroupNameSearch(groupEntity.getId().substring(0, 4));
-        groupStudyDao.save(groupEntity);
-        groupDto.setId(groupEntity.getId());
+        if (userEntity.getId().equals(coursesEntity.get().getUserEntity().getId())) {
+            GroupEntity groupEntity = new GroupEntity(groupDto.getName(), coursesEntity.get());
+            groupEntity.setId(UUID.randomUUID().toString());
+            groupEntity.setGroupNameSearch(groupEntity.getId().substring(0, 4));
+            groupStudyDao.save(groupEntity);
+            groupDto.setId(groupEntity.getId());
+        } else throw new AccessException();
         return groupDto;
     }
 
@@ -83,10 +91,33 @@ public class GroupStudyServiceImpl implements GroupStudyService {
         List<GroupUser> groupUser = userEntity.getGroupStudies();
         return groupUser.stream().map(GroupStudyServiceImpl::groupUserToGroupDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<GroupDto> groupByCourse(String nameCourse) {
+        Optional<CoursesEntity> coursesEntity = coursesServiceDao.getCourseEntity(nameCourse);
+        List<GroupEntity> groupEntities = coursesEntity.get().getGroupEntities();
+        return groupEntities.stream().map(GroupStudyServiceImpl::groupToGroupDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserGroupDto> getUserGroup(String groupId) {
+        GroupEntity groupEntity = groupStudyDao.getGroupEntity(groupId);
+        return groupEntity.getGroupUsers().stream().map(GroupStudyServiceImpl::groupEntityToGroupUserDto).collect(Collectors.toList());
+    }
+
     public static GroupDto groupUserToGroupDto(GroupUser groupUser){
         return new GroupDto(groupUser.getGroupEntity().getId(),
                 groupUser.getGroupEntity().getName(), new CoursesEntity(groupUser.getGroupEntity().getCoursesEntity().getId(),
                 groupUser.getGroupEntity().getCoursesEntity().getTitle(), groupUser.getGroupEntity().getCoursesEntity().getDescription(),
                 null, null, null));
+    }
+    public static GroupDto groupToGroupDto(GroupEntity groupEntity){
+        return new GroupDto(groupEntity.getId(),
+                groupEntity.getName(),null);
+    }
+    public static UserGroupDto groupEntityToGroupUserDto(GroupUser groupUser){
+        return new UserGroupDto(groupUser.getUserEntity().getId(),
+                groupUser.getUserEntity().getFirstName(), groupUser.getUserEntity().getLastName(),
+                groupUser.getUserEntity().getMiddleName(), groupUser.getUserEntity().getLogin());
     }
 }

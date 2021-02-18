@@ -37,8 +37,18 @@ public class GroupStudyController {
         return new ResponseEntity<>(new GenericResponse<>(groupStudyService.findAllGroup()), HttpStatus.OK);
     }
 
+    @GetMapping("/by/{nameCourse}")
+    public ResponseEntity<GenericResponse<?>> getGroupByCourse(@PathVariable String nameCourse) {
+        return new ResponseEntity<>(new GenericResponse<>(groupStudyService.groupByCourse(nameCourse)), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{groupId}")
+    public ResponseEntity<GenericResponse<?>> getUserGroup(@PathVariable String groupId) {
+        return new ResponseEntity<>(new GenericResponse<>(groupStudyService.getUserGroup(groupId)), HttpStatus.OK);
+    }
+
     @PostMapping("/add")
-    public ResponseEntity<GenericResponse<?>> groupAdd(@Valid @RequestBody GroupDto groupDto) {
+    public ResponseEntity<GenericResponse<?>> groupAdd(@Valid @RequestBody GroupDto groupDto) throws AccessException {
         return new ResponseEntity<>(new GenericResponse<>(groupStudyService.addGroup(groupDto)), HttpStatus.OK);
     }
 }
