@@ -33,5 +33,40 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2020-02-23_1" author="koen">
+        <createTable tableName="question_of_exam">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_type" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exam_of_course_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_address_exam_of_course" references="exam_of_course(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2020-02-23_2" author="koen">
+        <createTable tableName="answer_of_question">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="correct_answer" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_of_exam_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_address_question_of_exam" references="question_of_exam(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

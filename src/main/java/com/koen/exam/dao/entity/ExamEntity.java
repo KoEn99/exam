@@ -7,6 +7,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -38,4 +40,7 @@ public class ExamEntity {
     @ManyToOne
     @JoinColumn(name = "courses_table_id")
     private CoursesEntity coursesEntity;
+    @OneToMany(mappedBy = "examEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<QuestionEntity> questionEntitiesList = new ArrayList<>();
+
 }

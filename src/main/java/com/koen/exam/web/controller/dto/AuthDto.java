@@ -2,6 +2,7 @@ package com.koen.exam.web.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthDto {
 
     @NotBlank(message = "Поле login не может быть пустым")

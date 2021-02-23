@@ -20,8 +20,6 @@ import javax.validation.constraints.NotBlank;
 public class AuthController {
     @Autowired
     private AuthorizationService authorizationService;
-    @Autowired
-    private JwtProvider jwtProvider;
 
     @PostMapping("/register")
     public ResponseEntity<GenericResponse<?>> registerUser(@Valid @RequestBody AuthDto authDto) {

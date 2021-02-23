@@ -3,6 +3,7 @@ package com.koen.exam.dao.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "group_user")
+@NoArgsConstructor
 public class GroupUser implements Serializable {
     @EmbeddedId
     GroupStudyKey id;
