@@ -16,4 +16,6 @@ public class ExamServiceDao {
     public ExamEntity createExam(ExamEntity examEntity){
         return examEntityRepository.save(examEntity);
     }
+    public ExamEntity getExamId(Long examId){return examEntityRepository.findById(examId).get();}
+
 }

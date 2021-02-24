@@ -44,7 +44,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 stringBuilder.append(fE.getCode()).append("\n");
             }
         }
-        log.error("ERROR: method arguments are not valid: ", stringBuilder.toString());
+        log.error("ERROR: method arguments are not valid: " + stringBuilder.toString(), stringBuilder.toString());
         GenericResponse<?> genericResponse = new GenericResponse(1000,stringBuilder.toString());
         return new ResponseEntity(genericResponse, BAD_REQUEST);
     }

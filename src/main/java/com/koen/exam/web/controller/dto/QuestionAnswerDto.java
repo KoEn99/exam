@@ -12,6 +12,7 @@ import java.util.List;
 public class QuestionAnswerDto {
     private String question;
     private String questionType;
-    private String examId;
+    private Long examId;
+    private float questionScore;
     private List<AnswerDto> answers;
 }

@@ -41,7 +41,8 @@
             <column name="title" type="VARCHAR(1024)">
                 <constraints nullable="false"/>
             </column>
-            <column name="order" type="INT">
+            <column name="order_question" type="INT"/>
+            <column name="score" type="FLOAT">
                 <constraints nullable="false"/>
             </column>
             <column name="question_type" type="VARCHAR(40)">

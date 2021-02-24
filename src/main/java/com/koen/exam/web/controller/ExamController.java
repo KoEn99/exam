@@ -24,8 +24,8 @@ public class ExamController {
     ExamService examService;
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
-    public ResponseEntity<GenericResponse<?>> createCourse (@Valid @RequestBody ExamDto examDto)
-            throws AuthException, AccessException {
+    public ResponseEntity<GenericResponse<?>> createExam (@Valid @RequestBody ExamDto examDto)
+            throws AccessException {
         return new ResponseEntity<>(new GenericResponse<>(
                 examService.createExam(examDto)), HttpStatus.OK);
     }
