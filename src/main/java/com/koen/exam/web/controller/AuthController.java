@@ -22,7 +22,7 @@ public class AuthController {
     private AuthorizationService authorizationService;
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse<?>> registerUser(@Valid @RequestBody AuthDto authDto) {
+    public ResponseEntity<GenericResponse<?>> registerUser(@Valid @RequestBody AuthDto authDto) throws AuthException {
         return new ResponseEntity<>(new GenericResponse<>(
                 authorizationService.createPerson(authDto)), HttpStatus.OK);
     }

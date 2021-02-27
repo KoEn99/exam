@@ -5,6 +5,9 @@ import com.koen.exam.web.controller.dto.AnswerResponse;
 import com.koen.exam.web.controller.dto.ExamDto;
 import com.koen.exam.web.controller.exception.AccessException;
 
+import java.util.List;
+
 public interface ExamService {
-    AnswerResponse createExam(ExamDto examDto) throws AccessException;
+    ExamDto createExam(ExamDto examDto) throws AccessException;
+    List<ExamDto> getExamByCourseId(String courseId);
 }

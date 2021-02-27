@@ -13,4 +13,7 @@ public class QuestionServiceDao {
     public QuestionEntity save(QuestionEntity questionEntity){
         return questionEntityRepository.save(questionEntity);
     }
+    public QuestionEntity getQuestion(Long questionId){
+        return questionEntityRepository.findById(questionId).get();
+    }
 }

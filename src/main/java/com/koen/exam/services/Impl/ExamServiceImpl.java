@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -26,20 +28,38 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     CoursesServiceDao coursesServiceDao;
     @Override
-    public AnswerResponse createExam(ExamDto examDto) throws AccessException {
+    public ExamDto createExam(ExamDto examDto) throws AccessException {
         CoursesEntity coursesEntity = coursesServiceDao.getCourseEntity(examDto.getCoursesEntity()).get();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        String login = userDetails.getUsername();
-        if (coursesEntity.getUserEntity().getLogin().equals(login)) {
-            ExamEntity examEntity = new ExamEntity();
-            examEntity.setTitle(examDto.getTitle());
-            examEntity.setDescription(examDto.getDescription());
-            examEntity.setTimeWatch(examDto.getTimeWatch());
-            examEntity.setStatusType(StatusType.valueOf(examDto.getStatusType()));
-            examEntity.setCoursesEntity(coursesEntity);
-            examServiceDao.createExam(examEntity);
-            return new AnswerResponse("Тест успешно создан!");
-        } else throw new AccessException();
+        ExamEntity examEntity = new ExamEntity();
+        examEntity.setTitle(examDto.getTitle());
+        examEntity.setDescription(examDto.getDescription());
+        examEntity.setTimeWatch(examDto.getTimeWatch());
+        examEntity.setStatusType(StatusType.valueOf(examDto.getStatusType()));
+        examEntity.setCoursesEntity(coursesEntity);
+        examEntity = examServiceDao.createExam(examEntity);
+        examDto.setId(examEntity.getId());
+        return examDto;
+    }
+
+    @Override
+    public List<ExamDto> getExamByCourseId(String courseId) {
+        CoursesEntity coursesEntity = coursesServiceDao.getCourseEntity(courseId).get();
+        return coursesEntity.
+                getExamEntityList().
+                stream().
+                map(ExamServiceImpl::examEntityToExamDto).
+                collect(Collectors.toList());
+    }
+    private static ExamDto examEntityToExamDto(ExamEntity examEntity){
+        return new ExamDto(
+                examEntity.getId(),
+                examEntity.getTitle(),
+                examEntity.getDescription(),
+                examEntity.getTimeWatch(),
+                examEntity.getDateStart(),
+                examEntity.getDateStop(),
+                examEntity.getStatusType().name(),
+                examEntity.getCoursesEntity().getId()
+        );
     }
 }

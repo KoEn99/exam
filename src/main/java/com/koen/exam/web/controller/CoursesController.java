@@ -31,7 +31,8 @@ public class CoursesController {
         return new ResponseEntity<>(new GenericResponse<>(
                 coursesService.getMyCourse()), HttpStatus.OK);
     }
-    @GetMapping("/find/{id}")
+    @PreAuthorize("hasRole('USER') and @access.accessPageCourse(principal, #id)")
+    @GetMapping("/get/{id}")
     public ResponseEntity<GenericResponse<?>> findCourse(@PathVariable String id)
             throws AuthException, AccessException {
         return new ResponseEntity<>(new GenericResponse<>(coursesService.findCourse(id)), HttpStatus.OK);

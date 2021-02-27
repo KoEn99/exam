@@ -17,10 +17,22 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') and @access.accessCreateQuestion(principal, #questionAnswerDto.examId)")
     @PostMapping("/create")
     public ResponseEntity<GenericResponse<?>> createExam(@RequestBody QuestionAnswerDto questionAnswerDto) {
         return new ResponseEntity<>(new GenericResponse<>(
                 questionService.createQuestion(questionAnswerDto)), HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('USER') and @access.accessCreateQuestion(principal, #examId)")
+    @GetMapping("/get/list/{examId}")
+    public ResponseEntity<GenericResponse<?>> getListQuestion(@PathVariable Long examId) {
+        return new ResponseEntity<>(new GenericResponse<>(
+                questionService.getQuestionListByExam(examId)), HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('USER') and @access.accessPageQuestion(principal, #questionId)")
+    @GetMapping("/page/{questionId}")
+    public ResponseEntity<GenericResponse<?>> getAnswerListByQuestion(@PathVariable Long questionId) {
+        return new ResponseEntity<>(new GenericResponse<>(
+                questionService.getPageQuestion(questionId)), HttpStatus.OK);
     }
 }

@@ -75,8 +75,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         return new String(bytes, StandardCharsets.UTF_8);
     }
     @Override
-    public AnswerResponse createPerson(AuthDto authDto) {
-        userServiceDao.saveUser(authDto);
+    public AnswerResponse createPerson(AuthDto authDto) throws AuthException {
+        if (userServiceDao.findByLogin(authDto.getLogin()) == null) {
+            userServiceDao.saveUser(authDto);
+        } else throw new AuthException("Пользователь с данной электронной почтой существует");
         return new AnswerResponse("Регистрация прошла успешно");
     }
 }

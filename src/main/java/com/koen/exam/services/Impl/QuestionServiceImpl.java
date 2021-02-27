@@ -5,6 +5,7 @@ import com.koen.exam.dao.ExamServiceDao;
 import com.koen.exam.dao.QuestionServiceDao;
 import com.koen.exam.dao.QuestionType;
 import com.koen.exam.dao.entity.AnswerEntity;
+import com.koen.exam.dao.entity.ExamEntity;
 import com.koen.exam.dao.entity.QuestionEntity;
 import com.koen.exam.services.ExamService;
 import com.koen.exam.services.QuestionService;
@@ -33,6 +34,50 @@ public class QuestionServiceImpl implements QuestionService {
         ).collect(Collectors.toList());
         answerServiceDao.saveAll(answerEntities);
         return new AnswerResponse("Вопрос успешно создан");
+    }
+
+    @Override
+    public List<QuestionAnswerDto> getQuestionListByExam(Long examId) {
+        ExamEntity examEntity = examServiceDao.getExamId(examId);
+        return examEntity.
+                getQuestionEntitiesList().
+                stream().
+                map(QuestionServiceImpl::questionEntityToQuestionDto).
+                collect(Collectors.toList());
+    }
+
+    @Override
+    public QuestionAnswerDto getPageQuestion(Long questionId) {
+        QuestionEntity questionEntity = questionService.getQuestion(questionId);
+        return new QuestionAnswerDto(
+                questionEntity.getId(),
+                questionEntity.getTitle(),
+                questionEntity.getQuestionType().name(),
+                questionEntity.getExamEntity().getId(),
+                questionEntity.getScore(),
+                questionEntity.
+                        getAnswerEntities().
+                        stream().
+                        map(QuestionServiceImpl::answerEntityToAnswerDto).
+                        collect(Collectors.toList())
+        );
+    }
+    private static AnswerDto answerEntityToAnswerDto(AnswerEntity answerEntity){
+        return new AnswerDto(
+                answerEntity.getId(),
+                answerEntity.getTitle(),
+                answerEntity.getCorrectAnswer()
+        );
+    }
+    private static QuestionAnswerDto questionEntityToQuestionDto(QuestionEntity questionEntity){
+        return new QuestionAnswerDto(
+                questionEntity.getId(),
+                questionEntity.getTitle(),
+                questionEntity.getQuestionType().name(),
+                questionEntity.getExamEntity().getId(),
+                questionEntity.getScore(),
+                null
+        );
     }
     private static AnswerEntity formingAnswer(AnswerDto answerDto, QuestionEntity questionEntity){
         AnswerEntity answerEntity = new AnswerEntity();
