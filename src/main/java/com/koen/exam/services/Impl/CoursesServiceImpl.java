@@ -5,6 +5,7 @@ import com.koen.exam.dao.entity.CoursesEntity;
 import com.koen.exam.dao.entity.UserEntity;
 import com.koen.exam.security.CustomUserDetails;
 import com.koen.exam.services.CoursesService;
+import com.koen.exam.web.controller.dto.CoursePageDto;
 import com.koen.exam.web.controller.dto.CourseResponse;
 import com.koen.exam.web.controller.dto.CoursesDto;
 import com.koen.exam.web.controller.exception.AuthException;
@@ -52,8 +53,16 @@ public class CoursesServiceImpl implements CoursesService {
     }
 
     @Override
-    public CourseResponse findCourse(String id) {
+    public CoursePageDto findCourse(String id) {
         CoursesEntity coursesEntity = coursesServiceDao.getCourseEntity(id).get();
-        return new CourseResponse(coursesEntity.getId(), coursesEntity.getTitle(), coursesEntity.getDescription());
+        return new CoursePageDto(
+                coursesEntity.getId(),
+                coursesEntity.getTitle(),
+                coursesEntity.getDescription(),
+                coursesEntity.getExamEntityList().
+                        stream().
+                        map(ExamServiceImpl::examEntityToExamDto).
+                        collect(Collectors.toList())
+        );
     }
 }

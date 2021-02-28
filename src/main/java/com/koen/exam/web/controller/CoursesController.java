@@ -32,9 +32,10 @@ public class CoursesController {
                 coursesService.getMyCourse()), HttpStatus.OK);
     }
     @PreAuthorize("hasRole('USER') and @access.accessPageCourse(principal, #id)")
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<GenericResponse<?>> findCourse(@PathVariable String id)
             throws AuthException, AccessException {
         return new ResponseEntity<>(new GenericResponse<>(coursesService.findCourse(id)), HttpStatus.OK);
     }
+
 }

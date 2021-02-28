@@ -50,7 +50,7 @@ public class ExamServiceImpl implements ExamService {
                 map(ExamServiceImpl::examEntityToExamDto).
                 collect(Collectors.toList());
     }
-    private static ExamDto examEntityToExamDto(ExamEntity examEntity){
+    public static ExamDto examEntityToExamDto(ExamEntity examEntity){
         return new ExamDto(
                 examEntity.getId(),
                 examEntity.getTitle(),

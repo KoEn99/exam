@@ -54,12 +54,9 @@ public class GlobalAccess {
                                     @NonNull final String courseId) throws AccessException {
         CoursesEntity coursesEntity = coursesServiceDao.getCourseEntity(courseId).get();
         UserEntity userEntity = userServiceDao.findByLogin(userDetails.getUsername());
-        GroupUser groupEntity = null;
-        for (GroupEntity groupCourse : coursesEntity.getGroupEntities()) {
-            groupEntity = userEntity.getGroupStudies().stream().filter(groupUser ->
-                    groupUser.getGroupEntity().getId().equals(groupCourse.getId())).findAny().orElse(null);
-        }
-        if (groupEntity == null) throw new AccessException();
+        boolean groupEntity = userEntity.getGroupStudies().stream().anyMatch(groupUser ->
+                    groupUser.getGroupEntity().getCoursesEntity().getId().equals(coursesEntity.getId()));
+        if (!groupEntity) throw new AccessException();
         return true;
     }
     public boolean accessCreateQuestion(@NonNull final UserDetails userDetails,
