@@ -5,10 +5,12 @@ import com.koen.exam.dao.ExamServiceDao;
 import com.koen.exam.dao.StatusType;
 import com.koen.exam.dao.entity.CoursesEntity;
 import com.koen.exam.dao.entity.ExamEntity;
+import com.koen.exam.dao.entity.QuestionEntity;
 import com.koen.exam.security.CustomUserDetails;
 import com.koen.exam.services.ExamService;
 import com.koen.exam.web.controller.dto.AnswerResponse;
 import com.koen.exam.web.controller.dto.ExamDto;
+import com.koen.exam.web.controller.dto.QuestionAnswerDto;
 import com.koen.exam.web.controller.exception.AccessException;
 import com.koen.exam.web.controller.exception.ExamException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,27 @@ public class ExamServiceImpl implements ExamService {
                 stream().
                 map(ExamServiceImpl::examEntityToExamDto).
                 collect(Collectors.toList());
+    }
+
+    @Override
+    public List<QuestionAnswerDto> getExam(Long examId) {
+        ExamEntity examEntity = examServiceDao.getExamId(examId);
+        return examEntity.getQuestionEntitiesList().
+                stream().
+                map(ExamServiceImpl::questionEntityToQuestionAnswerDto).
+                collect(Collectors.toList());
+    }
+    public static QuestionAnswerDto questionEntityToQuestionAnswerDto(QuestionEntity questionEntity){
+        QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
+        questionAnswerDto.setId(questionEntity.getId());
+        questionAnswerDto.setQuestion(questionEntity.getTitle());
+        questionAnswerDto.setQuestionScore(questionEntity.getScore());
+        questionAnswerDto.setQuestionType(questionEntity.getQuestionType().name());
+        questionAnswerDto.setAnswers(questionEntity.
+                getAnswerEntities().
+                stream().map(QuestionServiceImpl::answerEntityToAnswerDto).
+                collect(Collectors.toList()));
+        return questionAnswerDto;
     }
     public static ExamDto examEntityToExamDto(ExamEntity examEntity){
         return new ExamDto(

@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="2021-03-04_1" author="koen">
+        <createTable tableName="number_try_table">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="auth_user_id" type="VARCHAR(256)">
+                <constraints nullable="false" foreignKeyName="fk_address_auth_user" references="auth_user(id)"/>
+            </column>
+            <column name="exam_of_course_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_address_exam_of_course" references="exam_of_course(id)"/>
+            </column>
+            <column name="general_score" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2021-03-04_2" author="koen">
+        <createTable tableName="answer_user">
+            <column name="number_try_table_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_address_number_try_table" references="number_try_table(id)"
+                primaryKey="true"/>
+            </column>
+            <column name="question_of_exam_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_address_question_of_exam" references="question_of_exam(id)"
+                             primaryKey="true"/>
+            </column>
+            <column name="auth_user_id" type="VARCHAR(256)">
+                <constraints nullable="false" foreignKeyName="fk_address_auth_user" references="auth_user(id)"/>
+            </column>
+            <column name="answer_text" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="correct_answer" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

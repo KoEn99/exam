@@ -62,7 +62,7 @@ public class QuestionServiceImpl implements QuestionService {
                         collect(Collectors.toList())
         );
     }
-    private static AnswerDto answerEntityToAnswerDto(AnswerEntity answerEntity){
+    public static AnswerDto answerEntityToAnswerDto(AnswerEntity answerEntity){
         return new AnswerDto(
                 answerEntity.getId(),
                 answerEntity.getTitle(),

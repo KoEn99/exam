@@ -1,8 +1,6 @@
 package com.koen.exam.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.koen.exam.dao.StatusType;
-import com.sun.istack.Nullable;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -37,10 +35,14 @@ public class ExamEntity {
     @Column(name = "status_active", length = 40)
     @Enumerated(EnumType.STRING)
     private StatusType statusType;
+
     @ManyToOne
     @JoinColumn(name = "courses_table_id")
     private CoursesEntity coursesEntity;
+
     @OneToMany(mappedBy = "examEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuestionEntity> questionEntitiesList = new ArrayList<>();
+    @OneToMany(mappedBy = "examEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TryEntity> tryEntities = new ArrayList<>();
 
 }
