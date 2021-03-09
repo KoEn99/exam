@@ -12,14 +12,20 @@ import java.util.List;
 public class AnswerServiceDao {
     @Autowired
     AnswerEntityRepository answerEntityRepository;
-    public void saveAll(List<AnswerEntity> answerEntities){
+
+    public void saveAll(List<AnswerEntity> answerEntities) {
         for (AnswerEntity answerEntity : answerEntities) {
             answerEntityRepository.save(answerEntity);
         }
     }
+
     public List<AnswerEntity> getAnswerEntityByQuestionAndCorrectAnswer(
             QuestionEntity questionEntity, Boolean correctAnswer
-    ){
+    ) {
         return answerEntityRepository.getAnswerEntitiesByQuestionEntityAndCorrectAnswer(questionEntity, correctAnswer);
+    }
+
+    public AnswerEntity getAnswerEntityById(Long id) {
+        return answerEntityRepository.findById(id).get();
     }
 }

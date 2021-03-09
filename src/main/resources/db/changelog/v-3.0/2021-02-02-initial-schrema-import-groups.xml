@@ -12,7 +12,8 @@
             <column name="name" type="VARCHAR(256)"/>
             <column name="group_name_search" type="VARCHAR(4)"/>
             <column name="courses_table_id" type="VARCHAR(256)">
-                <constraints nullable="false" foreignKeyName="fk_address_courses_table" references="courses_table(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_address_courses_table" references="courses_table(id)"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -21,10 +22,12 @@
         <createTable tableName="group_user">
             <column name="auth_user_id" type="VARCHAR(256)">
                 <constraints nullable="false" foreignKeyName="fk_address_auth_user" references="auth_user(id)"
-                primaryKey="true"/>
+                primaryKey="true"
+                             deleteCascade="true"/>
             </column>
             <column name="groups_table_id" type="VARCHAR(256)">
-                <constraints nullable="false" foreignKeyName="fk_address_groups_table" references="groups_table(id)" primaryKey="true"/>
+                <constraints nullable="false" foreignKeyName="fk_address_groups_table" references="groups_table(id)" primaryKey="true"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>

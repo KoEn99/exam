@@ -34,4 +34,6 @@ public class QuestionEntity {
     private ExamEntity examEntity;
     @OneToMany(mappedBy = "questionEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AnswerEntity> answerEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "questionEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AnswerUserEntity> answerUserEntities = new ArrayList<>();
 }

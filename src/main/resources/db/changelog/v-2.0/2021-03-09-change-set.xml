@@ -4,6 +4,13 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
-    <include file="2021-02-01-initial-schrema-import-exam.xml" relativeToChangelogFile="true"/>
-    <include file="2021-03-09-change-set.xml" relativeToChangelogFile="true"/>
+    <changeSet author="koen" id="2020-02-01_1">
+        <addColumn tableName="exam_of_course" >
+            <column name="general_score"
+                    type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn >
+    </changeSet>
+
 </databaseChangeLog>

@@ -40,6 +40,9 @@ public class ExamEntity {
     @JoinColumn(name = "courses_table_id")
     private CoursesEntity coursesEntity;
 
+    @Column(name = "general_score")
+    private float generalScore;
+
     @OneToMany(mappedBy = "examEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuestionEntity> questionEntitiesList = new ArrayList<>();
     @OneToMany(mappedBy = "examEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

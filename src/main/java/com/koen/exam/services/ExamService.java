@@ -12,4 +12,5 @@ public interface ExamService {
     ExamDto createExam(ExamDto examDto) throws AccessException;
     List<ExamDto> getExamByCourseId(String courseId);
     List<QuestionAnswerDto> getExam(Long examId);
+    void updateExamEntity(ExamDto examDto);
 }

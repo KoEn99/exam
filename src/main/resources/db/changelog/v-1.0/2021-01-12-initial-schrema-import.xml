@@ -24,7 +24,8 @@
             <column name="last_name" type="VARCHAR(256)"/>
             <column name="middle_name" type="VARCHAR(256)"/>
             <column name="role_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_address_role" references="role(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_address_role" references="role(id)"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>

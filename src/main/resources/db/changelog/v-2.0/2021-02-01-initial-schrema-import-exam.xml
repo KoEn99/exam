@@ -12,7 +12,8 @@
             <column name="title" type="VARCHAR(256)"/>
             <column name="description" type="VARCHAR(1024)"/>
             <column name="auth_user_id" type="VARCHAR(256)">
-                <constraints nullable="false" foreignKeyName="fk_address_auth_user" references="auth_user(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_address_auth_user" references="auth_user(id)"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -29,7 +30,8 @@
             <column name="date_stop" type="TIMESTAMP WITH TIME ZONE"/>
             <column name="status_active" type="VARCHAR(40)"/>
             <column name="courses_table_id" type="VARCHAR(256)">
-                <constraints nullable="false" foreignKeyName="fk_address_courses_table" references="courses_table(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_address_courses_table" references="courses_table(id)"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -49,7 +51,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="exam_of_course_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_address_exam_of_course" references="exam_of_course(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_address_exam_of_course" references="exam_of_course(id)"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -65,7 +68,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="question_of_exam_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_address_question_of_exam" references="question_of_exam(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_address_question_of_exam" references="question_of_exam(id)"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>

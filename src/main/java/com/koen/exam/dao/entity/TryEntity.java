@@ -19,6 +19,8 @@ public class TryEntity {
     @ManyToOne
     @JoinColumn(name = "exam_of_course_id")
     private ExamEntity examEntity;
+    @Column(name = "general_score")
+    private float generalScore;
 
     @OneToMany(mappedBy = "tryEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AnswerUserEntity> answerUserEntities = new ArrayList<>();

@@ -15,7 +15,11 @@ public class AnswerUserEntity {
     @JoinColumn(name = "number_try_table_id")
     private TryEntity tryEntity;
     @ManyToOne
-    @MapsId("auth_user_id")
-    @JoinColumn(name = "auth_user_id")
-    private UserEntity userEntity;
+    @MapsId("question_of_exam_id")
+    @JoinColumn(name = "question_of_exam_id")
+    private QuestionEntity questionEntity;
+    @Column(name = "answer_text")
+    private String answerText;
+    @Column(name = "correct_answer")
+    private Boolean correctAnswer;
 }

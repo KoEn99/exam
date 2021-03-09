@@ -11,6 +11,7 @@ import com.koen.exam.services.ExamService;
 import com.koen.exam.services.QuestionService;
 import com.koen.exam.web.controller.dto.AnswerDto;
 import com.koen.exam.web.controller.dto.AnswerResponse;
+import com.koen.exam.web.controller.dto.ExamDto;
 import com.koen.exam.web.controller.dto.QuestionAnswerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class QuestionServiceImpl implements QuestionService {
     ExamServiceDao examServiceDao;
     @Autowired
     AnswerServiceDao answerServiceDao;
+    @Autowired
+    ExamService examService;
     @Override
     public AnswerResponse createQuestion(QuestionAnswerDto questionAnswerDto) {
         QuestionEntity questionEntity = formingQuestion(questionAnswerDto);
@@ -33,6 +36,9 @@ public class QuestionServiceImpl implements QuestionService {
                 (AnswerDto answerDto) -> formingAnswer(answerDto, questionEntity)
         ).collect(Collectors.toList());
         answerServiceDao.saveAll(answerEntities);
+        ExamDto examDto = new ExamDto();
+        examDto.setId(questionEntity.getExamEntity().getId());
+        examService.updateExamEntity(examDto);
         return new AnswerResponse("Вопрос успешно создан");
     }
 

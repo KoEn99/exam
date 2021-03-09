@@ -61,6 +61,18 @@ public class ExamServiceImpl implements ExamService {
                 map(ExamServiceImpl::questionEntityToQuestionAnswerDto).
                 collect(Collectors.toList());
     }
+
+    @Override
+    public void updateExamEntity(ExamDto examDto) {
+        float score = 0;
+        ExamEntity examEntityBD = examServiceDao.getExamId(examDto.getId());
+        for (QuestionEntity questionEntity:examEntityBD.getQuestionEntitiesList()){
+            score += questionEntity.getScore();
+        }
+        examEntityBD.setGeneralScore(score);
+        examServiceDao.createExam(examEntityBD);
+    }
+
     public static QuestionAnswerDto questionEntityToQuestionAnswerDto(QuestionEntity questionEntity){
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
         questionAnswerDto.setId(questionEntity.getId());

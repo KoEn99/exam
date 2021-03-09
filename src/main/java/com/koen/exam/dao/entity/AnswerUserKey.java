@@ -16,6 +16,6 @@ public class AnswerUserKey implements Serializable {
     @Column(name = "number_try_table_id")
     Long tryId;
 
-    @Column(name = "auth_user_id")
-    String authId;
+    @Column(name = "question_of_exam_id")
+    Long questionId;
 }
