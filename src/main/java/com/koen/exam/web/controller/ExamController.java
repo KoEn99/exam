@@ -32,7 +32,7 @@ public class ExamController {
         return new ResponseEntity<>(new GenericResponse<>(
                 examService.getExamByCourseId(courseId)), HttpStatus.OK);
     }
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') and @access.accessExam(principal, #examId)")
     @GetMapping("/{examId}")
     public ResponseEntity<GenericResponse<?>> getExam (@PathVariable Long examId) {
         return new ResponseEntity<>(new GenericResponse<>(

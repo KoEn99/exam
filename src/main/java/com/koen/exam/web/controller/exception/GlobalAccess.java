@@ -59,6 +59,28 @@ public class GlobalAccess {
         if (!groupEntity) throw new AccessException();
         return true;
     }
+    public boolean accessSubmit(@NonNull final UserDetails userDetails,
+                                    @NonNull final Long questionId) throws AccessException {
+        QuestionEntity questionEntity = questionServiceDao.getQuestion(questionId);
+        UserEntity userEntity = userServiceDao.findByLogin(userDetails.getUsername());
+        boolean groupEntity = userEntity.getGroupStudies().stream().anyMatch(groupUser ->
+                groupUser.getGroupEntity().getCoursesEntity().getId().equals(
+                        questionEntity.getExamEntity().getCoursesEntity().getId()
+                ));
+        if (!groupEntity) throw new AccessException();
+        return true;
+    }
+    public boolean accessExam(@NonNull final UserDetails userDetails,
+                                @NonNull final Long examId) throws AccessException {
+        ExamEntity examEntity = examServiceDao.getExamId(examId);
+        UserEntity userEntity = userServiceDao.findByLogin(userDetails.getUsername());
+        boolean groupEntity = userEntity.getGroupStudies().stream().anyMatch(groupUser ->
+                groupUser.getGroupEntity().getCoursesEntity().getId().equals(
+                        examEntity.getCoursesEntity().getId()
+                ));
+        if (!groupEntity) throw new AccessException();
+        return true;
+    }
     public boolean accessCreateQuestion(@NonNull final UserDetails userDetails,
                                         @NonNull final Long examId) throws AccessException {
         ExamEntity examEntity = examServiceDao.getExamId(examId);
