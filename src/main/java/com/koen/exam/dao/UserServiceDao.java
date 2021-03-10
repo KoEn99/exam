@@ -4,8 +4,11 @@ import com.koen.exam.dao.entity.RoleEntity;
 import com.koen.exam.dao.entity.UserEntity;
 import com.koen.exam.dao.repo.RoleEntityRepository;
 import com.koen.exam.dao.repo.UserEntityRepository;
+import com.koen.exam.security.CustomUserDetails;
 import com.koen.exam.web.controller.dto.AuthDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +43,10 @@ public class UserServiceDao {
         return userEntityRepository.findByLogin(login);
     }
 
-    public UserEntity findByLoginAndPassword(String login, String password) {
-
-        return null;
+    public UserEntity getUserByJwt() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String login = userDetails.getUsername();
+        return findByLogin(login);
     }
 }

@@ -7,6 +7,8 @@ import com.koen.exam.dao.repo.ExamEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExamServiceDao {
     @Autowired
@@ -17,5 +19,8 @@ public class ExamServiceDao {
         return examEntityRepository.save(examEntity);
     }
     public ExamEntity getExamId(Long examId){return examEntityRepository.findById(examId).get();}
+    public List<ExamEntity> findAllByCoursesEntityAndStatusType(CoursesEntity coursesEntity, StatusType statusType){
+        return examEntityRepository.findAllByCoursesEntityAndStatusType(coursesEntity, statusType);
+    }
 
 }

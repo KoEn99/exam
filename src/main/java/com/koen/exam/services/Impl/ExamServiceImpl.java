@@ -6,20 +6,13 @@ import com.koen.exam.dao.StatusType;
 import com.koen.exam.dao.entity.CoursesEntity;
 import com.koen.exam.dao.entity.ExamEntity;
 import com.koen.exam.dao.entity.QuestionEntity;
-import com.koen.exam.security.CustomUserDetails;
 import com.koen.exam.services.ExamService;
-import com.koen.exam.web.controller.dto.AnswerResponse;
 import com.koen.exam.web.controller.dto.ExamDto;
 import com.koen.exam.web.controller.dto.QuestionAnswerDto;
 import com.koen.exam.web.controller.exception.AccessException;
-import com.koen.exam.web.controller.exception.ExamException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 

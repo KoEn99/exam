@@ -1,7 +1,10 @@
 package com.koen.exam.services.Impl;
 
 import com.koen.exam.dao.CoursesServiceDao;
+import com.koen.exam.dao.ExamServiceDao;
+import com.koen.exam.dao.StatusType;
 import com.koen.exam.dao.entity.CoursesEntity;
+import com.koen.exam.dao.entity.ExamEntity;
 import com.koen.exam.dao.entity.UserEntity;
 import com.koen.exam.security.CustomUserDetails;
 import com.koen.exam.services.CoursesService;
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
 public class CoursesServiceImpl implements CoursesService {
     @Autowired
     CoursesServiceDao coursesServiceDao;
+    @Autowired
+    ExamServiceDao examServiceDao;
     @Override
     public CourseResponse createCourse(CoursesDto coursesDto) throws AuthException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,11 +60,12 @@ public class CoursesServiceImpl implements CoursesService {
     @Override
     public CoursePageDto findCourse(String id) {
         CoursesEntity coursesEntity = coursesServiceDao.getCourseEntity(id).get();
+        List<ExamEntity> examEntity = examServiceDao.findAllByCoursesEntityAndStatusType(coursesEntity, StatusType.ACTIVE);
         return new CoursePageDto(
                 coursesEntity.getId(),
                 coursesEntity.getTitle(),
                 coursesEntity.getDescription(),
-                coursesEntity.getExamEntityList().
+                examEntity.
                         stream().
                         map(ExamServiceImpl::examEntityToExamDto).
                         collect(Collectors.toList())

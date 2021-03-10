@@ -30,7 +30,6 @@ public class TryServiceImpl implements TryService {
 
     @Override
     public TryDto trySubmit(List<QuestionAnswerDto> questionAnswerDtoList) {
-        float generalScore = 0;
         float score = 0;
         QuestionEntity questionEntity1 = questionServiceDao.getQuestion(questionAnswerDtoList.get(0).getId());
         ExamEntity examEntity = questionEntity1.getExamEntity();
@@ -57,7 +56,7 @@ public class TryServiceImpl implements TryService {
                                     answerEntities.get(i).getId()
                             )){
                                 isCorrect = true;
-                                questionAnswerDto.getAnswers().get(i).setAnswerCorrect(true);
+                                questionAnswerDto.getAnswers().get(i).setAnswerCorrect(true); //определить правильно ли ответил, чтобы указать в бд
                             } else {
                                 isCorrect = false;
                                 questionAnswerDto.getAnswers().get(i).setAnswerCorrect(false);
