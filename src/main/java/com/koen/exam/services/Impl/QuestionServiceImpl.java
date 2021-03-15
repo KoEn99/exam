@@ -75,6 +75,13 @@ public class QuestionServiceImpl implements QuestionService {
                 answerEntity.getCorrectAnswer()
         );
     }
+    public static AnswerDto answerEntityToAnswerDtoWithoutTrueAnswer(AnswerEntity answerEntity){
+        return new AnswerDto(
+                answerEntity.getId(),
+                answerEntity.getTitle(),
+                null
+        );
+    }
     private static QuestionAnswerDto questionEntityToQuestionDto(QuestionEntity questionEntity){
         return new QuestionAnswerDto(
                 questionEntity.getId(),

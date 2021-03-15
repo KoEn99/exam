@@ -74,7 +74,7 @@ public class ExamServiceImpl implements ExamService {
         questionAnswerDto.setQuestionType(questionEntity.getQuestionType().name());
         questionAnswerDto.setAnswers(questionEntity.
                 getAnswerEntities().
-                stream().map(QuestionServiceImpl::answerEntityToAnswerDto).
+                stream().map(QuestionServiceImpl::answerEntityToAnswerDtoWithoutTrueAnswer).
                 collect(Collectors.toList()));
         return questionAnswerDto;
     }
