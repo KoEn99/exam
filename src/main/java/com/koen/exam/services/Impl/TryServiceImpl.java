@@ -36,7 +36,8 @@ public class TryServiceImpl implements TryService {
         List<QuestionEntity> questionEntities = examEntity.getQuestionEntitiesList();
         for (QuestionAnswerDto questionAnswerDto:questionAnswerDtoList){
             QuestionEntity questionEntity = questionServiceDao.getQuestion(questionAnswerDto.getId());
-            questionEntities.remove(questionEntity);
+            questionEntities.remove(questionEntity); // удаляю все те которые обработаваю, останутся только то, что не было отпарвлено пользователем и
+            // автоматически станет неправильным ответом.
             List<AnswerEntity> answerEntities = answerServiceDao.
                     getAnswerEntityByQuestionAndCorrectAnswer(questionEntity, true);
             switch (questionEntity.getQuestionType()){
