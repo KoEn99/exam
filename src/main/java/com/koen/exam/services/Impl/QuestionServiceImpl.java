@@ -9,10 +9,8 @@ import com.koen.exam.dao.entity.ExamEntity;
 import com.koen.exam.dao.entity.QuestionEntity;
 import com.koen.exam.services.ExamService;
 import com.koen.exam.services.QuestionService;
-import com.koen.exam.web.controller.dto.AnswerDto;
-import com.koen.exam.web.controller.dto.AnswerResponse;
-import com.koen.exam.web.controller.dto.ExamDto;
-import com.koen.exam.web.controller.dto.QuestionAnswerDto;
+import com.koen.exam.services.ScoreAnalysis;
+import com.koen.exam.web.controller.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +29,8 @@ public class QuestionServiceImpl implements QuestionService {
     AnswerServiceDao answerServiceDao;
     @Autowired
     ExamService examService;
+    @Autowired
+    ScoreAnalysis scoreAnalysis;
     @Override
     public AnswerResponse createQuestion(QuestionAnswerDto questionAnswerDto) {
         QuestionEntity questionEntity = formingQuestion(questionAnswerDto);
@@ -45,45 +45,21 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionAnswerDto> getQuestionListByExam(Long examId) {
+    public List<QuestionWithDataDto> getQuestionListByExam(Long examId) {
         ExamEntity examEntity = examServiceDao.getExamId(examId);
-        List<Float> loginHard = new ArrayList<>();
-        List<Float> loginHardSqr = new ArrayList<>();
+        List<QuestionWithDataDto> questionWithDataDtos = new ArrayList<>();
         for (int i = 0; i < examEntity.getQuestionEntitiesList().size(); i++){
-            int generalSize = examEntity.getQuestionEntitiesList().get(i).getAnswerUserEntities().size();
-            Long answerTrueCount =
-                    examEntity.getQuestionEntitiesList().
-                            get(i).getAnswerUserEntities().
-                            stream().filter
-                            (answerUserEntity -> answerUserEntity.getCorrectAnswer().equals(true)).count();
-            if (answerTrueCount == 0) continue;
-            if (answerTrueCount == generalSize) continue;
-            float partTrueValue = (float)answerTrueCount/(float) generalSize;
-            float partFalseValue = 1 - partTrueValue;
-            float TrueDivisFalse = partFalseValue/partTrueValue;
-            float lnPart = (float) Math.log(TrueDivisFalse);
-            float sqrLnPart = (float) Math.pow(lnPart, 2);
-            loginHard.add(lnPart);
-            loginHardSqr.add(sqrLnPart);
+            QuestionWithDataDto questionWithDataDto = new QuestionWithDataDto(
+                    examEntity.getQuestionEntitiesList().get(i).getId(),
+                    examEntity.getQuestionEntitiesList().get(i).getTitle(),
+                    examEntity.getQuestionEntitiesList().get(i).getQuestionType().name(),
+                    null,
+                    examEntity.getQuestionEntitiesList().get(i).getScore(),
+                    scoreAnalysis.getScoreAnalysis(examEntity.getQuestionEntitiesList().get(i))
+            );
+            questionWithDataDtos.add(questionWithDataDto);
         }
-        float averageHard = averageLog(loginHard, examEntity.getQuestionEntitiesList().size());
-        float averageHardSqr = (float) Math.pow(averageHard, 2);
-        float sumLogHardSqr = (float) loginHardSqr.stream().mapToDouble((s)->(double) s).sum();
-        float dispersion = (4 - examEntity.getQuestionEntitiesList().size() * averageHardSqr)/(examEntity.getQuestionEntitiesList().size() - 1);
-        //float dispersion = (sumLogHardSqr - examEntity.getQuestionEntitiesList().size() * averageHardSqr)/(examEntity.getQuestionEntitiesList().size() - 1);
-        return examEntity.
-                getQuestionEntitiesList().
-                stream().
-                map(QuestionServiceImpl::questionEntityToQuestionDto).
-                collect(Collectors.toList());
-    }
-
-    private float averageLog(List<Float> logHard, int generalValueQuestion){
-        float sum = 0;
-        for (float x : logHard){
-            sum += x;
-        }
-        return sum/generalValueQuestion;
+        return questionWithDataDtos;
     }
 
     @Override
