@@ -9,14 +9,14 @@ import com.koen.exam.dao.entity.ExamEntity;
 import com.koen.exam.dao.entity.QuestionEntity;
 import com.koen.exam.services.ExamService;
 import com.koen.exam.services.QuestionService;
-import com.koen.exam.web.controller.dto.AnswerDto;
-import com.koen.exam.web.controller.dto.AnswerResponse;
-import com.koen.exam.web.controller.dto.ExamDto;
-import com.koen.exam.web.controller.dto.QuestionAnswerDto;
+import com.koen.exam.services.ScoreAnalysis;
+import com.koen.exam.web.controller.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +29,8 @@ public class QuestionServiceImpl implements QuestionService {
     AnswerServiceDao answerServiceDao;
     @Autowired
     ExamService examService;
+    @Autowired
+    ScoreAnalysis scoreAnalysis;
     @Override
     public AnswerResponse createQuestion(QuestionAnswerDto questionAnswerDto) {
         QuestionEntity questionEntity = formingQuestion(questionAnswerDto);
@@ -43,13 +45,21 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionAnswerDto> getQuestionListByExam(Long examId) {
+    public List<QuestionWithDataDto> getQuestionListByExam(Long examId) {
         ExamEntity examEntity = examServiceDao.getExamId(examId);
-        return examEntity.
-                getQuestionEntitiesList().
-                stream().
-                map(QuestionServiceImpl::questionEntityToQuestionDto).
-                collect(Collectors.toList());
+        List<QuestionWithDataDto> questionWithDataDtos = new ArrayList<>();
+        for (int i = 0; i < examEntity.getQuestionEntitiesList().size(); i++){
+            QuestionWithDataDto questionWithDataDto = new QuestionWithDataDto(
+                    examEntity.getQuestionEntitiesList().get(i).getId(),
+                    examEntity.getQuestionEntitiesList().get(i).getTitle(),
+                    examEntity.getQuestionEntitiesList().get(i).getQuestionType().name(),
+                    null,
+                    examEntity.getQuestionEntitiesList().get(i).getScore(),
+                    scoreAnalysis.getScoreAnalysis(examEntity.getQuestionEntitiesList().get(i))
+            );
+            questionWithDataDtos.add(questionWithDataDto);
+        }
+        return questionWithDataDtos;
     }
 
     @Override
