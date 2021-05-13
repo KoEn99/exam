@@ -25,6 +25,9 @@ public class GroupStudyDao {
     public GroupEntity getGroupEntity(String groupNameSearch){
         return groupEntityRepository.findByGroupNameSearch(groupNameSearch);
     }
+    public GroupEntity getGroupById(String groupId){
+        return groupEntityRepository.getById(groupId);
+    }
     public List<GroupUser> findAllGroup(UserEntity userEntity){
         return groupStudyRepository.findAllByUserEntity(userEntity);
     }

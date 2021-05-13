@@ -50,6 +50,14 @@ public class GlobalAccess {
         }
         return true;
     }
+    public boolean accessUserByGroupId(@NonNull final UserDetails userDetails,
+                                     @NonNull final String idGroup) throws AccessException {
+        GroupEntity groupEntity = groupStudyDao.getGroupById(idGroup);
+        if (!groupEntity.getCoursesEntity().getUserEntity().getLogin().equals(userDetails.getUsername())){
+            throw new AccessException();
+        }
+        return true;
+    }
     public boolean accessPageCourse(@NonNull final UserDetails userDetails,
                                     @NonNull final String courseId) throws AccessException {
         CoursesEntity coursesEntity = coursesServiceDao.getCourseEntity(courseId).get();
