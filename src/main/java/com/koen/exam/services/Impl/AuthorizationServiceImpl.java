@@ -42,7 +42,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         UserEntity userEntity = userServiceDao.findByLogin(login);
         if (userEntity == null) throw new AuthException("Пользователь с таким Email не существует");
         else if (!checkPasswordUser(password, userEntity)) throw new AuthException("Неверный логин или пароль");
-        return new Token(jwtProvider.generateToken(userEntity.getLogin()), null);
+        String fio = userEntity.getLastName() + " " + userEntity.getFirstName() + " " + userEntity.getMiddleName();
+        return new Token(jwtProvider.generateToken(userEntity.getLogin()), null, fio, login);
     }
     private String cutAuthCode(String authorization) throws AuthException {
         if (StringUtils.isNotBlank(authorization) && authorization.startsWith("Basic")) {

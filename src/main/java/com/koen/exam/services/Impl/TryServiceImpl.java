@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TryServiceImpl implements TryService {
@@ -50,21 +51,24 @@ public class TryServiceImpl implements TryService {
                     break;
                 }
                 case MULTIPLE:{
-                    boolean isCorrect = false;
+                    byte correctAnswerCount = 0;
                     if (questionAnswerDto.getAnswers().size() == answerEntities.size()) {
                         for (int i = 0; i < questionAnswerDto.getAnswers().size(); i++) {
                             if (questionAnswerDto.getAnswers().get(i).getId().equals(
                                     answerEntities.get(i).getId()
                             )){
-                                isCorrect = true;
+                                correctAnswerCount++;
                                 questionAnswerDto.getAnswers().get(i).setAnswerCorrect(true); //определить правильно ли ответил, чтобы указать в бд
                             } else {
-                                isCorrect = false;
                                 questionAnswerDto.getAnswers().get(i).setAnswerCorrect(false);
                             }
                         }
+                    } else {
+                        for (int i = 0; i < questionAnswerDto.getAnswers().size(); i++){
+                            questionAnswerDto.getAnswers().get(i).setAnswerCorrect(false);
+                        }
                     }
-                    if (isCorrect) score += questionEntity.getScore();
+                    if (correctAnswerCount==answerEntities.size()) score += questionEntity.getScore();
                     break;
                 }
                 case SINGLE:{
