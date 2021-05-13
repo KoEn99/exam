@@ -28,6 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     static int ACCESS_EXCEPTION = 2000;
     static int MYSELF_EXCEPTION = 3000;
     static int GROUP_EXCEPTION = 4000;
+    static int EXAM_EXCEPTION = 5000;
 
     @Autowired
     MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
@@ -60,6 +61,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AccessException.class)
     protected ResponseEntity<GenericResponse<?>> handleAccessException(AccessException e) {
         GenericResponse<?> genericResponse = new GenericResponse<>(ACCESS_EXCEPTION, e.getMessage());
+        return new ResponseEntity<>(genericResponse, BAD_REQUEST);
+    }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(ExamException.class)
+    protected ResponseEntity<GenericResponse<?>> handleExamException(ExamException e) {
+        GenericResponse<?> genericResponse = new GenericResponse<>(EXAM_EXCEPTION, e.getMessage());
         return new ResponseEntity<>(genericResponse, BAD_REQUEST);
     }
     @ResponseStatus(BAD_REQUEST)

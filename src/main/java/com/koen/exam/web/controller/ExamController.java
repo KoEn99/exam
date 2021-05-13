@@ -32,10 +32,17 @@ public class ExamController {
         return new ResponseEntity<>(new GenericResponse<>(
                 examService.getExamByCourseId(courseId)), HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('USER') and @access.accessExam(principal, #examId) and " +
+            "@access.accessTryExam(principal, #examId)")
+    @GetMapping("/{examId}/play")
+    public ResponseEntity<GenericResponse<?>> getExamPlay (@PathVariable Long examId) {
+        return new ResponseEntity<>(new GenericResponse<>(
+                examService.getExam(examId)), HttpStatus.OK);
+    }
     @PreAuthorize("hasRole('USER') and @access.accessExam(principal, #examId)")
     @GetMapping("/{examId}")
     public ResponseEntity<GenericResponse<?>> getExam (@PathVariable Long examId) {
         return new ResponseEntity<>(new GenericResponse<>(
-                examService.getExam(examId)), HttpStatus.OK);
+                examService.getExamPage(examId)), HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component("access")
 public class GlobalAccess {
     @Autowired
@@ -19,6 +21,8 @@ public class GlobalAccess {
     ExamServiceDao examServiceDao;
     @Autowired
     QuestionServiceDao questionServiceDao;
+    @Autowired
+    TryServiceDao tryServiceDao;
 
     public boolean accessCourse(
             @NonNull final UserDetails userDetails,
@@ -87,6 +91,15 @@ public class GlobalAccess {
                         examEntity.getCoursesEntity().getId()
                 ));
         if (!groupEntity) throw new AccessException();
+        return true;
+    }
+    public boolean accessTryExam(@NonNull final UserDetails userDetails,
+                              @NonNull final Long examId) throws ExamException, MySelfException {
+        UserEntity userEntity = userServiceDao.findByLogin(userDetails.getUsername());
+        ExamEntity examEntity = examServiceDao.getExamId(examId);
+        List<TryEntity> tryEntity = tryServiceDao.
+                getTryByUserAndExamEntity(userEntity, examEntity);
+        if (tryEntity.size() == 1) throw new ExamException("У вас нет попыток");
         return true;
     }
     public boolean accessCreateQuestion(@NonNull final UserDetails userDetails,

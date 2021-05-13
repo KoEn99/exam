@@ -3,12 +3,12 @@ package com.koen.exam.services.Impl;
 import com.koen.exam.dao.CoursesServiceDao;
 import com.koen.exam.dao.ExamServiceDao;
 import com.koen.exam.dao.StatusType;
-import com.koen.exam.dao.entity.AnswerUserEntity;
 import com.koen.exam.dao.entity.CoursesEntity;
 import com.koen.exam.dao.entity.ExamEntity;
 import com.koen.exam.dao.entity.QuestionEntity;
 import com.koen.exam.services.ExamService;
 import com.koen.exam.web.controller.dto.ExamDto;
+import com.koen.exam.web.controller.dto.ExamPageDto;
 import com.koen.exam.web.controller.dto.QuestionAnswerDto;
 import com.koen.exam.web.controller.exception.AccessException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +54,13 @@ public class ExamServiceImpl implements ExamService {
                 stream().
                 map(ExamServiceImpl::questionEntityToQuestionAnswerDto).
                 collect(Collectors.toList());
+    }
+
+    @Override
+    public ExamPageDto getExamPage(Long examId) {
+        ExamEntity examEntity = examServiceDao.getExamId(examId);
+        return new ExamPageDto(examEntity.getTitle(),
+                examEntity.getDescription(), examEntity.getGeneralScore());
     }
 
     @Override
